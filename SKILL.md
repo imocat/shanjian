@@ -1,15 +1,15 @@
 ---
-name: shanjian-go-cli
-description: Install and safely operate the Shanjian Go CLI from GitHub Release binaries in Claude Code. Use when the user invokes /shanjian-go-cli, wants Claude Code to install shanjian, check login status, run Shanjian workflow commands, list templates/tasks/creations, download outputs, or package this skill for a GitHub repository that intentionally does not include Go CLI source code.
+name: shanjian-cli
+description: Install and safely operate the Shanjian CLI from GitHub Release binaries in Claude Code. Use when the user invokes /shanjian-cli, wants Claude Code to install shanjian, check login status, run Shanjian workflow commands, list templates/tasks/creations, download outputs, or package this skill for a GitHub repository that intentionally does not include CLI source code.
 ---
 
-# Shanjian Go CLI
+# Shanjian CLI
 
-在 Claude Code 中安装和使用闪剪 Go CLI 时使用本技能。这个 GitHub 包只面向 Claude Code 安装使用，不包含 Go CLI 源码或 Go 工程文件。
+在 Claude Code 中安装和使用闪剪 CLI 时使用本技能。这个 GitHub 包只面向 Claude Code 安装使用，不包含 CLI 源码或工程文件。
 
 ## 默认行为
 
-用户只输入 `/shanjian-go-cli` 或只点选本技能时，不要只解释本技能。直接执行以下流程：
+用户只输入 `/shanjian-cli` 或只点选本技能时，不要只解释本技能。直接执行以下流程：
 
 1. 定位本技能目录，也就是当前 `SKILL.md` 所在目录。
 2. 检查 `shanjian` 是否已在 PATH 中：运行 `shanjian --help` 或等价命令。
@@ -115,4 +115,4 @@ scripts/install-shanjian.sh
 scripts/install-shanjian.ps1
 ```
 
-不要把 Go 源码、构建目录、下载产物或登录态放进该 GitHub 仓库。
+不要把 CLI 源码、构建目录、下载产物或登录态放进该 GitHub 仓库。
