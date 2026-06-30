@@ -1,11 +1,23 @@
 ---
 name: shanjian-go-cli
-description: Install and safely operate the Shanjian Go CLI from GitHub Release binaries in Claude Code. Use when the user wants Claude Code to install shanjian, check login status, run Shanjian workflow commands, list templates/tasks/creations, download outputs, or package this skill for a GitHub repository that intentionally does not include Go CLI source code.
+description: Install and safely operate the Shanjian Go CLI from GitHub Release binaries in Claude Code. Use when the user invokes /shanjian-go-cli, wants Claude Code to install shanjian, check login status, run Shanjian workflow commands, list templates/tasks/creations, download outputs, or package this skill for a GitHub repository that intentionally does not include Go CLI source code.
 ---
 
 # Shanjian Go CLI
 
 在 Claude Code 中安装和使用闪剪 Go CLI 时使用本技能。这个 GitHub 包只面向 Claude Code 安装使用，不包含 Go CLI 源码或 Go 工程文件。
+
+## 默认行为
+
+用户只输入 `/shanjian-go-cli` 或只点选本技能时，不要只解释本技能。直接执行以下流程：
+
+1. 定位本技能目录，也就是当前 `SKILL.md` 所在目录。
+2. 检查 `shanjian` 是否已在 PATH 中：运行 `shanjian --help` 或等价命令。
+3. 如果已安装，运行 `shanjian auth status`，然后报告安装可用和登录状态。
+4. 如果未安装，在 macOS/Linux 执行 `<skill_dir>/scripts/install-shanjian.sh --version latest --install-dir "$HOME/.local/bin"`；在 Windows PowerShell 执行 `<skill_dir>\scripts\install-shanjian.ps1 -Version latest -InstallDir "$HOME\.local\bin"`。
+5. 安装后重新运行 `shanjian --help` 和 `shanjian auth status`。
+
+如果执行脚本需要网络、写入用户目录或提升权限，使用工具请求许可；不要把安装命令作为最终答案停在说明层。
 
 ## 包内容
 
@@ -21,13 +33,13 @@ description: Install and safely operate the Shanjian Go CLI from GitHub Release 
 macOS/Linux：
 
 ```bash
-scripts/install-shanjian.sh --version latest --install-dir "$HOME/.local/bin"
+<skill_dir>/scripts/install-shanjian.sh --version latest --install-dir "$HOME/.local/bin"
 ```
 
 Windows PowerShell：
 
 ```powershell
-.\scripts\install-shanjian.ps1 -Version latest -InstallDir "$HOME\.local\bin"
+<skill_dir>\scripts\install-shanjian.ps1 -Version latest -InstallDir "$HOME\.local\bin"
 ```
 
 安装脚本按当前系统下载匹配的 release asset，并在存在 `SHA256SUMS` 时校验哈希：
