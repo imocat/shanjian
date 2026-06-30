@@ -1,6 +1,6 @@
 ---
 name: shanjian-cli
-description: Install and safely operate the Shanjian CLI from GitHub Release binaries in Claude Code. Use when the user invokes /shanjian-cli, wants Claude Code to install shanjian, check login status, run Shanjian workflow commands, list templates/tasks/creations, download outputs, or package this skill for a GitHub repository that intentionally does not include CLI source code.
+description: Install and safely operate the Shanjian CLI from GitHub Release binaries in Claude Code. Use when the user invokes /shanjian-cli, wants Claude Code to install shanjian, show a QR-code image for auth login, check login status, run Shanjian workflow commands, list templates/tasks/creations, download outputs, or package this skill for a GitHub repository that intentionally does not include CLI source code.
 ---
 
 # Shanjian CLI
@@ -60,13 +60,28 @@ shanjian --help
 shanjian auth status
 ```
 
-不要替用户执行 `shanjian auth login`，除非用户明确要求登录。用户要求登录时，优先输出二维码 PNG 并展示给用户扫码：
+## 登录二维码展示流程
+
+不要替用户执行 `shanjian auth login`，除非用户明确要求登录。用户要求登录时，必须直接展示二维码图片，不要只给登录链接。
+
+1. 先确认当前 CLI 支持图片输出：运行 `shanjian auth login --help`，检查是否包含 `--qr-output`。如果没有，重新安装最新 release 后再继续；不要回退到旧的 `shanjian login` 或只贴链接。
+2. 默认把登录态和二维码放在当前项目下，避免写入不可控位置：`work/shanjian-state`、`work/shanjian-login-qr.png`。如果用户指定了状态目录或图片路径，使用用户指定值。
+3. 用可持续运行的终端会话启动登录命令，并让命令尽快返回首屏输出；不要等命令结束后才回复用户。
 
 ```bash
-shanjian auth login --qr-output /tmp/shanjian-login.png
+mkdir -p work/shanjian-state
+shanjian auth login --state-dir work/shanjian-state --qr-output work/shanjian-login-qr.png --timeout 300 --interval 2 --yes
 ```
 
-命令会打印 `二维码图片：<absolute-path>` 并等待扫码；拿到路径后，用 Markdown 图片语法把该 PNG 展示给用户。不要展示或总结登录后的 `bhb-session-token`。
+4. 命令会打印 `二维码图片：<absolute-path>` 并继续等待扫码。拿到路径或确认文件已生成后，立刻向用户发送 Markdown 图片，路径必须是绝对路径：
+
+```markdown
+![微信扫码登录](/absolute/path/to/work/shanjian-login-qr.png)
+```
+
+5. 保持登录命令会话运行并轮询它，直到登录成功、超时或用户取消。登录成功后，后续 `shanjian` 命令都要继续带同一个 `--state-dir work/shanjian-state`，除非用户要求改用默认登录态。
+
+不要展示或总结登录后的 `bhb-session-token`。
 
 ## 安全边界
 

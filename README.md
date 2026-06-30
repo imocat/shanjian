@@ -89,13 +89,14 @@ shanjian auth status
 shanjian auth login
 ```
 
-如果由 Claude Code 帮你登录，推荐让它输出二维码图片再展示给你扫码：
+如果由 Claude Code 帮你登录，应让它输出二维码图片并直接展示给你扫码，而不是只贴二维码链接：
 
 ```bash
-shanjian auth login --qr-output /tmp/shanjian-login.png
+mkdir -p work/shanjian-state
+shanjian auth login --state-dir work/shanjian-state --qr-output work/shanjian-login-qr.png --timeout 300 --interval 2 --yes
 ```
 
-CLI 会先打印 `二维码图片：/tmp/shanjian-login.png`，Claude Code 可以把这张 PNG 发出来给你扫码，然后继续等待登录确认。
+CLI 会先打印 `二维码图片：<absolute-path>`，Claude Code 应该立刻用 Markdown 图片把这张 PNG 发出来给你扫码，然后继续保持登录命令运行并等待确认。
 
 只读查询：
 
