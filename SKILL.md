@@ -60,13 +60,19 @@ shanjian --help
 shanjian auth status
 ```
 
-不要替用户执行 `shanjian auth login`，除非用户明确要求登录。
+不要替用户执行 `shanjian auth login`，除非用户明确要求登录。用户要求登录时，优先输出二维码 PNG 并展示给用户扫码：
+
+```bash
+shanjian auth login --qr-output /tmp/shanjian-login.png
+```
+
+命令会打印 `二维码图片：<absolute-path>` 并等待扫码；拿到路径后，用 Markdown 图片语法把该 PNG 展示给用户。不要展示或总结登录后的 `bhb-session-token`。
 
 ## 安全边界
 
 - 把 `~/.shanjian/session.json` 和任何自定义 `--state-dir` 会话文件视为敏感文件。
 - 不要打印、提交、复制或总结 `bhb-session-token`。
-- `auth login` 会写入本地登录态；`auth logout` 会删除登录态。
+- `auth login --qr-output <path>` 会写出登录二维码 PNG；`auth login` 会写入本地登录态；`auth logout` 会删除登录态。
 - 所有 `create` 命令都会提交真实任务，除非带 `--dry-run`，否则可能消耗积分。
 - 检查请求体时优先使用 `--dry-run`；对比接口结构时优先使用 `--json`。
 - 下载命令会写文件；除非用户要求，不要把下载产物放进要发布的 skill 仓库。

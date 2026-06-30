@@ -89,6 +89,14 @@ shanjian auth status
 shanjian auth login
 ```
 
+如果由 Claude Code 帮你登录，推荐让它输出二维码图片再展示给你扫码：
+
+```bash
+shanjian auth login --qr-output /tmp/shanjian-login.png
+```
+
+CLI 会先打印 `二维码图片：/tmp/shanjian-login.png`，Claude Code 可以把这张 PNG 发出来给你扫码，然后继续等待登录确认。
+
 只读查询：
 
 ```bash
@@ -113,7 +121,7 @@ shanjian creation short-video create "短视频主题" --duration 30 --dry-run
 
 - 登录态通常保存在 `~/.shanjian/session.json`。
 - 不要提交、打印或分享 `bhb-session-token`。
-- `auth login` 会写入本机登录态；`auth logout` 会删除登录态。
+- `auth login --qr-output <path>` 会写出登录二维码 PNG；登录成功后会写入本机登录态；`auth logout` 会删除登录态。
 - 创建类命令会提交真实任务，可能消耗积分。
 - 下载命令会写入文件，不要把下载产物提交到 skill 仓库。
 
